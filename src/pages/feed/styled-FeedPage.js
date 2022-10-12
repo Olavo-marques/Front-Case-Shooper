@@ -1,7 +1,20 @@
 import styled from "styled-components"
 
+export const ContainerBody = styled.div`
+box-sizing: border-box;
+`
+export const BottonCart = styled.h1`
+cursor: pointer;
+border-radius: 5%;
+background-color: #1DD342;
+padding: 5px;
+width: 150px;
+display: flex;
+
+justify-content: center;
+`
 export const CardProduct = styled.div`
-border: 1px solid black;
+border: 2px solid green;
 border-radius: 1px;
 display: flex;
 /* flex-wrap: nowrap; */
@@ -14,7 +27,7 @@ height: 25vh;
 export const ContainerCards = styled.div`
 display: flex;
 flex-wrap: wrap;
-width: 100vw;
+/* width: 100vw; */
 justify-content: center;
 /* flex-shrink: 1; */
 row-gap: 10px;
@@ -32,7 +45,7 @@ display: flex;
 width: 100vw;
 `
 export const ContainerAdd = styled.div`
-border: 1px solid black;
+/* border: 1px solid black; */
 display: flex;
 flex-direction: column;
 /* width: 100%; */
@@ -71,8 +84,15 @@ cursor: pointer;
 `
 export const BottonsAdd = styled.div`
 display:flex;
+border-radius: 50px; 
 align-items: center;
-padding-bottom: 5px;
+margin-bottom: 5px;
+background-color: #1DD342;
+/* padding: 5px; */
+&:hover{
+    background-color: #00FF40;
+}
+
 `
 export const BottonsMore = styled.div`
 display:flex;
@@ -95,8 +115,4 @@ border-radius: 50px;
     color: red;
     background-color: red;
 }
-`
-export const BottonCart = styled.h1`
-cursor: pointer;
-
 `

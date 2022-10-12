@@ -12,7 +12,7 @@ flex-direction: column;
 justify-content: center;
 align-items: center;
 /* border: 1px solid black; */
-height: 100vh;
+margin-top: 25vh;
 `
 export const Product = styled.div`
 display: flex;
@@ -59,6 +59,13 @@ border-radius: 50px;
 &:hover{
     background-color: red;
 }
+`
+export const ContainerForm = styled.form`
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+height: 100px;
+/* border: 1px solid red; */
 `
 export const BottonAddProduct = styled.h1`
 cursor: pointer;

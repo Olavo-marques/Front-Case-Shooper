@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
 import { URL_BASE } from "../../components/constants/url";
+import { gotoCardPage } from "../../router/cordinator";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
 import * as S from "./styled-FeedPage";
 import axios from "axios";
-import { gotoCardPage } from "../../router/cordinator";
 
 const FeedPage = () => {
   const navigate = useNavigate()
@@ -25,27 +25,6 @@ const FeedPage = () => {
       })
   }, [])
 
-
-  // const addProduto = (id, name, price, qtyStock) => {
-  //   console.log("addProduto")
-
-  //   const body = {
-  //     idProduct: id,
-  //     nameProduct: name,
-  //     price: price,
-  //     qtyStock: qtyStock
-  //   }
-  //   axios.post(`${URL_BASE}user/cart`, body)
-  //     .then((res) => {
-  //       // setProducts(res.data)
-  //       console.log(res)
-  //       alert("Porduto Adicionado no Carrinho")
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //       alert(err.response.data.message)
-  //     })
-  // }
   console.log("newCart", newCart)
 
   const addProduto = (id, name, price, qtyStock) => {
@@ -69,7 +48,7 @@ const FeedPage = () => {
   }
 
   return (
-    <div>
+    <S.ContainerBody>
       {
         newCart.length > 0  ?
           <S.BottonCart onClick={() => gotoCardPage(navigate)}>Carrinho</S.BottonCart>
@@ -110,7 +89,7 @@ const FeedPage = () => {
           })
         }
       </S.ContainerCards>
-    </div >
+    </S.ContainerBody >
   )
 }
 
