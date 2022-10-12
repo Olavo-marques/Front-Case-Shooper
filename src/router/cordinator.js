@@ -1,11 +1,11 @@
-export const goToDetailPage = (navigate, id) => {
-    navigate(`/detail/${id}`)
-}
-
-export const goToFeedPage = (navigate) => {
+export const gotoHomePage = (navigate) => {
     navigate("/")
 }
 
+export const goToFeedPage = (navigate) => {
+    navigate("/feed")
+}
+
 export const gotoCardPage = (navigate) => {
-    navigate("/card")
+    navigate("/feed/card")
 }

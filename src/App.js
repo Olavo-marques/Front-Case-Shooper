@@ -1,11 +1,11 @@
-
 import { Router } from "./router/router";
+import {BodyApp} from './styled-App'
 
 function App() {
   return (
-    // <GlobalState>
+    <BodyApp>
       <Router />
-    // </GlobalState>
+    </BodyApp>
   );
 }
 

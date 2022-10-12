@@ -1,7 +1,7 @@
 import EMPYT_CART_IMG from "../../assets/images/carrinho-vazio-shooper.png"
 import { renderIntoDocument } from "react-dom/test-utils"
 import { URL_BASE } from "../../components/constants/url"
-import { goToFeedPage } from "../../router/cordinator"
+import { gotoCardPage, goToFeedPage } from "../../router/cordinator"
 import useForm from "../../components/hooks/useForm"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
@@ -18,7 +18,8 @@ const CartPage = () => {
   const [sumUpdata, setSumUpdata] = useState(0)
   let [price, setPrice] = useState(0)
   const { form, onChange } = useForm({
-    date: "",
+    name: "",
+    date: ""
   })
 
   let sumCart = 0
@@ -27,22 +28,22 @@ const CartPage = () => {
   }
 
   useEffect(() => {
+    setCartQuantity(cartNow)
     setProductsInCart(cartNow)
   }, [])
 
-  // console.log("sumUpdata", sumUpdata)
 
   const register = (event) => {
     event.preventDefault();
     console.log(form)
+    addRequest(form)
   }
 
   const productLess = (indice, productPrice) => {
     setPrice(price - productPrice)
-    console.log("cartQuantity.length === 1", cartQuantity.length === 1)
-    console.log("cartQuantity.length  === 0", cartQuantity.length === 0)
-    console.log("cartQuantity.length", cartQuantity.length)
-    if (cartQuantity.length === 0) {
+
+    if (cartNow.length === 1) {
+      // if (cartQuantity.length === 1) {
       let cartItems2 = []
       setCartQuantity(cartItems2)
       setProductsInCart(cartItems2)
@@ -74,7 +75,41 @@ const CartPage = () => {
     }
   }
 
-  return (
+  // const newCartQuantity = [...cartQuantity]
+  // console.log("newCartQuantity", newCartQuantity)
+
+  // const cuntRepeat = (array, valeu) => {
+  //   cartQuantity.reduce((acc, value) => {
+  //     return value === item ? acc + 1 : acc, 0
+  //   })
+  // }
+
+  // console.log(cuntRepeat)
+
+  const addRequest = (form) => {
+    const totalPrice = sumCart + price
+
+    const body = {
+      nameUser: form.name,
+      deliveryDate: form.date,
+      totalPrice: totalPrice,
+      productList: cartQuantity
+    }
+
+    console.log("body", body)
+
+    axios.post(`${URL_BASE}user/product/cart`, body)
+      .then((res) => {
+        alert(res.data.message)
+        goToFeedPage(navigate)
+      })
+      .catch((err) => {
+        console.log(err)
+        alert(err.response.data.message)
+      })
+  }
+
+  return (            // Rever problema de descontar aopneas um item do carrinho
     <S.ContainerBody>
       <div>
         {
@@ -132,21 +167,27 @@ const CartPage = () => {
             <div>
               <h4>TOTAL: {(sumCart + price).toFixed(2)}</h4>
 
-              <form onSubmit={register}>
-
-                <h4>Qunado deseja receber?</h4>
+              <h4>Quando deseja receber?</h4>
+              <S.ContainerForm onSubmit={register}>
+                <input
+                  name={"name"}
+                  value={form.name}
+                  onChange={onChange}
+                  placeholder="Nome"
+                  required
+                  type={"text"}
+                />
                 <input
                   name={"date"}
                   value={form.date}
                   onChange={onChange}
-                  placeholder="Mínimo 6 caracteres"
                   required
                   type={"date"}
                 />
                 <button>Finalizar Pedido</button>
-              </form>
+              </S.ContainerForm>
             </div>
-            : <S.BottonAddProduct onClick={() => goToFeedPage(navigate)}>Experimente adicionar produtos</S.BottonAddProduct>
+            : <S.BottonAddProduct onClick={() => gotoCardPage(navigate)}>Experimente adicionar produtos</S.BottonAddProduct>
         }
       </div>
     </S.ContainerBody >
