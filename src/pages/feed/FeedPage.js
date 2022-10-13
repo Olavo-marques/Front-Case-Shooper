@@ -1,15 +1,13 @@
-import { URL_BASE } from "../../components/constants/url";
-import { gotoCardPage } from "../../router/cordinator";
+import Header from "../../components/header/Header";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"
+import { URL_BASE } from "../../constants/url";
 import * as S from "./styled-FeedPage";
 import axios from "axios";
 
 const FeedPage = () => {
-  const navigate = useNavigate()
   const [products, setProducts] = useState([])
   const [newCart, setNewCart] = useState([])
-  const [displayCart, setDisplayCart] = useState(false)
+  const [hideCart, setHideCart] = useState(0)
 
   useEffect(() => {
 
@@ -17,15 +15,14 @@ const FeedPage = () => {
       .then((res) => {
         setProducts(res.data)
         console.log(res)
-        // newCart.length > 0 ? setDisplayCart(true) : setDisplayCart(false)
+        setHideCart(1)
+        localStorage.setItem("whichScreen", hideCart)
       })
       .catch((err) => {
         console.log(err)
         console.log(err.response)
       })
   }, [])
-
-  console.log("newCart", newCart)
 
   const addProduto = (id, name, price, qtyStock) => {
     console.log("addProduto")
@@ -47,13 +44,12 @@ const FeedPage = () => {
     localStorage.setItem("cartProducts", JSON.stringify(newProductInsert))
   }
 
+
   return (
     <S.ContainerBody>
-      {
-        newCart.length > 0  ?
-          <S.BottonCart onClick={() => gotoCardPage(navigate)}>Carrinho</S.BottonCart>
-          : <p>{""}</p>
-      }
+
+      <Header hideCart={hideCart} newCart={newCart} />
+
       <S.ContainerCards>
         {
           products.map((product) => {
@@ -61,7 +57,7 @@ const FeedPage = () => {
               <S.CardProduct key={product.id}>
 
                 <S.Stock>
-                  <p>Em Estoque {product.qty_stock}</p>
+                  <p>Restam {product.qty_stock} unidades</p>
                 </S.Stock>
 
                 <S.Description>
@@ -74,11 +70,7 @@ const FeedPage = () => {
 
                   <S.BottonsAdd>
 
-                    {/* <S.BottonsMore>➕</S.BottonsMore> */}
-
                     <S.Add onClick={() => addProduto(product.id, product.name, product.price, product.qty_stock)}>Adicionar</S.Add>
-
-                    {/* <S.BottonsLess>➖</S.BottonsLess> */}
 
                   </S.BottonsAdd>
 

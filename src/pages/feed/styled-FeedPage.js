@@ -3,16 +3,18 @@ import styled from "styled-components"
 export const ContainerBody = styled.div`
 box-sizing: border-box;
 `
-export const BottonCart = styled.h1`
-cursor: pointer;
-border-radius: 5%;
-background-color: #1DD342;
-padding: 5px;
-width: 150px;
+export const ContainerCards = styled.div`
 display: flex;
-
+flex-wrap: wrap;
+/* width: 100vw; */
 justify-content: center;
+row-gap: 30px;
+column-gap: 30px;
+flex-basis: 85%;
+/* margin-top: 5vh; */
+
 `
+
 export const CardProduct = styled.div`
 border: 2px solid green;
 border-radius: 1px;
@@ -23,17 +25,12 @@ flex-direction: column;
 border-radius: 5%;
 width: 250px;
 height: 25vh;
+transition: transform 1s;
+&:hover{
+    transform: scale(1.2);
+}
 `
-export const ContainerCards = styled.div`
-display: flex;
-flex-wrap: wrap;
-/* width: 100vw; */
-justify-content: center;
-/* flex-shrink: 1; */
-row-gap: 10px;
-column-gap: 15px;
-flex-basis: 85%;
-`
+
 export const ComponentCart = styled.div`
 display: flex;
 flex-basis: 15%;
@@ -72,25 +69,26 @@ export const Name = styled.div`
 text-align: center;
 `
 export const Add = styled.div`
-/* border: 1px solid red; */
-border-radius: 10px;
-padding: 5px;
-display:flex;
-/* flex-shrink: 1; */
-cursor: pointer;
-&:hover{
-    background-color: green;
-} 
+background-attachment: fixed;
+color: #FFF;
+font-family: sans-serif;
+/* &:hover{
+    background-color: #025440;
+}  */
 `
 export const BottonsAdd = styled.div`
 display:flex;
 border-radius: 50px; 
 align-items: center;
+justify-content: center;
 margin-bottom: 5px;
-background-color: #1DD342;
-/* padding: 5px; */
+background-color: #2DA77A;
+width: 100px;
+padding: 10px;
+cursor: pointer;
 &:hover{
-    background-color: #00FF40;
+    padding: 10px;
+    background-color: #025440;
 }
 
 `
