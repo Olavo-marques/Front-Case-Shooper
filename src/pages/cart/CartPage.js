@@ -1,22 +1,24 @@
-import EMPYT_CART_IMG from "../../assets/images/carrinho-vazio-shooper.png"
-import { renderIntoDocument } from "react-dom/test-utils"
-import { URL_BASE } from "../../components/constants/url"
-import { gotoCardPage, goToFeedPage } from "../../router/cordinator"
+import EMPYT_CART_IMG from "../../assets/images/carrinho-vazio-ultimo.png"
+import IMG_REMOVE_CART from "../../assets/images/remove-cart.png"
+import { goToFeedPage } from "../../router/cordinator"
 import useForm from "../../components/hooks/useForm"
+import Header from "../../components/header/Header"
 import { useNavigate } from "react-router-dom"
+import { URL_BASE } from "../../constants/url"
 import { useEffect, useState } from "react"
 import * as S from "./styled-CartPage";
 import axios from "axios"
 
 const CartPage = () => {
-  const navigate = useNavigate()
   const cartNow = JSON.parse(localStorage.getItem('cartProducts'))
   const [productsInCart, setProductsInCart] = useState([])
   const [productRepeat, setProductRepeat] = useState()
-  const [emptyCart, setEmptyCart] = useState(false)
   const [cartQuantity, setCartQuantity] = useState([])
-  const [sumUpdata, setSumUpdata] = useState(0)
+  const [updateCart, setUpdateCart] = useState(false)
+  const [emptyCart, setEmptyCart] = useState(false)
+  const [checkDate, setCheckDate] = useState(false)
   let [price, setPrice] = useState(0)
+  const navigate = useNavigate()
   const { form, onChange } = useForm({
     name: "",
     date: ""
@@ -29,9 +31,10 @@ const CartPage = () => {
 
   useEffect(() => {
     setCartQuantity(cartNow)
-    setProductsInCart(cartNow)
-  }, [])
-
+    if (cartNow.length === 0) {
+      setEmptyCart(true)
+    }
+  }, [updateCart])
 
   const register = (event) => {
     event.preventDefault();
@@ -41,13 +44,16 @@ const CartPage = () => {
 
   const productLess = (indice, productPrice) => {
     setPrice(price - productPrice)
+    setUpdateCart(true)
 
-    if (cartNow.length === 1) {
-      // if (cartQuantity.length === 1) {
+    if (cartQuantity.length <= 1) {
+      setCartQuantity(cartNow)
+
       let cartItems2 = []
       setCartQuantity(cartItems2)
       setProductsInCart(cartItems2)
       setEmptyCart(true)
+      localStorage.setItem("cartProducts", JSON.stringify(cartItems2))
     }
 
     let cartItems = cartNow.filter((product, index) => {
@@ -55,24 +61,7 @@ const CartPage = () => {
     })
 
     setCartQuantity(cartItems)
-  }
-
-  const productLessCopy = (indice, productPrice) => {
-    setPrice(price - productPrice)
-
-    if (cartQuantity.length >= 2) {
-      let cartItems = cartQuantity.filter((product, index) => {
-        return index !== indice
-      })
-
-      setCartQuantity(cartItems)
-
-    } else if (cartQuantity.length < 2) {
-      let cartItems2 = []
-      setCartQuantity(cartItems2)
-      setProductsInCart(cartItems2)
-      setEmptyCart(true)
-    }
+    localStorage.setItem("cartProducts", JSON.stringify(cartItems))
   }
 
   // const newCartQuantity = [...cartQuantity]
@@ -84,112 +73,126 @@ const CartPage = () => {
   //   })
   // }
 
-  // console.log(cuntRepeat)
+  const currentDate = new Date
+  const formatUTC = currentDate.toLocaleDateString().split("/").reverse().join("-")
 
   const addRequest = (form) => {
     const totalPrice = sumCart + price
+    console.log('form.date', form.date)
+    console.log('formatUTC', formatUTC + 1)
+    // setCheckDate(formatUTC)
+    if (form.date > formatUTC) {
+      const body = {
+        nameUser: form.name,
+        deliveryDate: form.date,
+        totalPrice: totalPrice,
+        productList: cartQuantity
+      }
 
-    const body = {
-      nameUser: form.name,
-      deliveryDate: form.date,
-      totalPrice: totalPrice,
-      productList: cartQuantity
+      console.log("body", body)
+
+      localStorage.removeItem("cartProducts")
+
+      axios.post(`${URL_BASE}user/product/cart`, body)
+        .then((res) => {
+          alert(res.data.message)
+          alert("O tempo máximo de entrega e de 24 hrs a partir do pedido finalizado.")
+          goToFeedPage(navigate)
+        })
+        .catch((err) => {
+          console.log(err)
+          alert(err.response.data.message)
+        })
+    } else if (form.date <= formatUTC) {
+      alert("Insira uma data superior a data atual.")
     }
 
-    console.log("body", body)
-
-    axios.post(`${URL_BASE}user/product/cart`, body)
-      .then((res) => {
-        alert(res.data.message)
-        goToFeedPage(navigate)
-      })
-      .catch((err) => {
-        console.log(err)
-        alert(err.response.data.message)
-      })
   }
 
   return (            // Rever problema de descontar aopneas um item do carrinho
     <S.ContainerBody>
-      <div>
-        {
-          emptyCart === false ?
-            <S.BottonBack onClick={() => goToFeedPage(navigate)}>Faltou algo?</S.BottonBack>
-            : <div>.</div>
-        }
-      </div>
-      <div>
-        {
-          emptyCart === false ?
-            <div>
-              {
-                cartQuantity.length > 0 ?
-                  cartQuantity.map((product, indice) => {
-                    return (
+      <Header emptyCart={emptyCart} />
+      <S.Main>
+        <S.ContainerList>
+          {
+            emptyCart === false && cartQuantity.length > 0 ?
+              (
+                <div>
+                  {
+                    cartQuantity.length > 0 ?
+                      (
+                        cartQuantity.map((product, index) => {
+                          return (
+                            <div key={index}>
+                              <S.Product>
+                                <S.ContainerDescription>
+                                  <S.TextDescription>{product.name}</S.TextDescription>
+                                </S.ContainerDescription>
 
-                      <div key={indice}>
-                        <S.Product>
-                          <div> {product.name}</div>
+                                <S.Bottons>
+                                  <S.Price>Preço: {product.price}</S.Price>
+                                  <S.BottonsLess src={IMG_REMOVE_CART} onClick={() => productLess(index, product.price)} />
+                                </S.Bottons>
+                              </S.Product>
+                            </div>
+                          )
+                        })
+                      )
+                      :
+                      (
+                        <div></div>
+                      )
+                  }
+                </div>
+              )
+              :
+              (
+                <S.ContainerCartEmpty>
+                  <S.EmptyQuestionText>Seu carrinho está vazio?</S.EmptyQuestionText>
+                  <S.CartImg src={EMPYT_CART_IMG}></S.CartImg>
+                </S.ContainerCartEmpty>
+              )
+          }
+        </S.ContainerList>
+        < S.ContainerInput >
+          {
+            emptyCart === false ?
+              (
+                <S.ContainerTotalForm>
+                  <S.Total>TOTAL: {(sumCart + price).toFixed(2)}</S.Total>
 
-                          <S.Bottons>
-                            <div>Preço: {product.price}</div>
+                  <S.DateReceive>Quando deseja receber?</S.DateReceive>
+                  <S.ContainerForm onSubmit={register}>
 
-                            <S.BottonsLess onClick={() => productLessCopy(indice, product.price)}>➖</S.BottonsLess>
+                    <S.Input
+                      id="name"
+                      name={"name"}
+                      value={form.name}
+                      onChange={onChange}
+                      placeholder="Nome"
+                      maxLength={"30"}
+                      required
+                      type={"text"}
+                      pattern={"^.{5,}"}
+                      title={"Mínimo seis caracteres"}
+                    />
 
-                          </S.Bottons>
-                        </S.Product>
-                      </div>
-                    )
-                  })
-                  :
-                  productsInCart.map((product, index) => {
-                    return (
-                      <div key={index}>
-                        <S.Product>
-                          <div> {product.name}</div>
+                    <S.Input
+                      name={"date"}
+                      value={form.date}
+                      onChange={onChange}
+                      required
+                      type={"date"}
+                    />
 
-                          <S.Bottons>
-                            <div>Preço: {product.price}</div>
-                            <S.BottonsLess onClick={() => productLess(index, product.price)}>➖</S.BottonsLess>
-                          </S.Bottons>
-                        </S.Product>
-                      </div>
-                    )
-                  })
-              }
-            </div>
-            : <S.ContainerCartEmpty> <h1>Seu carrinho está vazio?</h1> <S.CartImg src={EMPYT_CART_IMG}></S.CartImg></S.ContainerCartEmpty>
-        }
-      </div>
-      < div >
-        {
-          emptyCart === false ?
-            <div>
-              <h4>TOTAL: {(sumCart + price).toFixed(2)}</h4>
-
-              <h4>Quando deseja receber?</h4>
-              <S.ContainerForm onSubmit={register}>
-                <input
-                  name={"name"}
-                  value={form.name}
-                  onChange={onChange}
-                  placeholder="Nome"
-                  required
-                  type={"text"}
-                />
-                <input
-                  name={"date"}
-                  value={form.date}
-                  onChange={onChange}
-                  required
-                  type={"date"}
-                />
-                <button>Finalizar Pedido</button>
-              </S.ContainerForm>
-            </div>
-            : <S.BottonAddProduct onClick={() => gotoCardPage(navigate)}>Experimente adicionar produtos</S.BottonAddProduct>
-        }
-      </div>
+                    <S.FinalizeButton>Finalizar Pedido</S.FinalizeButton>
+                  </S.ContainerForm>
+                </S.ContainerTotalForm>
+              )
+              : <S.BottonAddProduct onClick={() => goToFeedPage(navigate)}>Experimente adicionar produtos</S.BottonAddProduct>
+          }
+        </S.ContainerInput>
+      </S.Main>
     </S.ContainerBody >
   )
 }

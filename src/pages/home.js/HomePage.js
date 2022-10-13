@@ -7,22 +7,30 @@ const HomePage = () => {
 
     return (
         <S.ContainerBody>
-            <S.ContainerDescription>
+            <S.Main>
+                <S.ContainerDescription>
 
-                <S.Welcome>Bem vindo (a) à Shooper ヾ(＠⌒ー⌒＠)ノ</S.Welcome>
-                <S.BigText>Aqui você compra </S.BigText>
-                <S.BigText>sem ir ao mercado.</S.BigText>
-                <S.LitleText>Automatizamos seu processo de comras, entregando </S.LitleText>
-                <S.LitleText>melhores preços e uma experiência encantadora.</S.LitleText>
-                <S.BottonProducts onClick={() => goToFeedPage(navigate)}>IR PARA PRODUTOS</S.BottonProducts>
+                    <S.ContainerWelcome>
+                        <S.Welcome>Bem vindo (a) à Shooper ヾ(＠⌒ー⌒＠)ノ</S.Welcome>
+                    </S.ContainerWelcome>
 
-            </S.ContainerDescription>
+                    <S.BigText>Aqui você compra sem ir ao mercado.</S.BigText>
+                    <S.LitleText>Automatizamos seu processo de compras, entregando melhores preços e uma experiência encantadora.</S.LitleText>
 
-            <S.ContainerImgHome>
+                    <S.ContainerBotton>
+                        <S.BottonProducts onClick={() => goToFeedPage(navigate)}>IR PARA PRODUTOS</S.BottonProducts>
+                    </S.ContainerBotton>
 
-                <S.ImgHome src={IMG_HOME} />
+                </S.ContainerDescription>
 
-            </S.ContainerImgHome>
+                <S.ContainerImgHome>
+
+                    <S.BackImg>
+                        <S.ImgHome src={IMG_HOME} />
+                    </S.BackImg>
+
+                </S.ContainerImgHome>
+            </S.Main>
 
         </S.ContainerBody>
     )
