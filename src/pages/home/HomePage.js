@@ -1,13 +1,13 @@
-import { useNavigate } from 'react-router-dom'
 import IMG_HOME from '../../assets/images/img-Home.png'
 import { goToFeedPage } from '../../router/cordinator'
+import { useNavigate } from 'react-router-dom'
 import * as S from './styled-HomePage'
 const HomePage = () => {
     const navigate = useNavigate()
 
     return (
         <S.ContainerBody>
-            <S.Main>
+            
                 <S.ContainerDescription>
 
                     <S.ContainerWelcome>
@@ -15,6 +15,7 @@ const HomePage = () => {
                     </S.ContainerWelcome>
 
                     <S.BigText>Aqui você compra sem ir ao mercado.</S.BigText>
+                    
                     <S.LitleText>Automatizamos seu processo de compras, entregando melhores preços e uma experiência encantadora.</S.LitleText>
 
                     <S.ContainerBotton>
@@ -30,7 +31,6 @@ const HomePage = () => {
                     </S.BackImg>
 
                 </S.ContainerImgHome>
-            </S.Main>
 
         </S.ContainerBody>
     )
