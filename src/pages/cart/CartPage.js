@@ -40,13 +40,8 @@ const CartPage = () => {
     addRequest(form)
   }
 
-  console.log("sumCart", sumCart)
-
   const productLess = (indice, productPrice) => {
-
-    console.log("productPrice", productPrice)
     setPrice(price - productPrice)
-    console.log("price", price)
 
     setUpdateCart(true)
 
