@@ -11,7 +11,7 @@ const InputCart = (props) => {
         props.emptyCart === false ?
           (
             <S.ContainerTotalForm>
-              <S.Total>TOTAL: {(props.sumCart + props.price).toFixed(2)}</S.Total>
+              <S.Total>TOTAL: {(props.sumCart).toFixed(2)}</S.Total>
 
               <S.DateReceive>Insira seu nome e quando deseja receber?</S.DateReceive>
               <S.ContainerForm onSubmit={props.register}>

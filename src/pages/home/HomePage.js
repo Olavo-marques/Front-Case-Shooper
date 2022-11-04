@@ -11,7 +11,7 @@ const HomePage = () => {
                 <S.ContainerDescription>
 
                     <S.ContainerWelcome>
-                        <S.Welcome>Bem vindo (a) à Shooper ヾ(＠⌒ー⌒＠)ノ</S.Welcome>
+                        <S.Welcome>Bem vindo (a) à Shopper ヾ(＠⌒ー⌒＠)ノ</S.Welcome>
                     </S.ContainerWelcome>
 
                     <S.BigText>Aqui você compra sem ir ao mercado.</S.BigText>
