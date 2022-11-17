@@ -10,6 +10,7 @@ export const Router = () => {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/feed" element={<FeedPage />} />
                 <Route path="/feed/card" element={<CardPage />} />
+                <Route path="*" element={<h1>Página não encontrada ヾ(＠⌒ー⌒＠)ノ</h1>} />
             </Routes>
         </BrowserRouter>
     )
